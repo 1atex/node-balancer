@@ -47,7 +47,7 @@
 Через process substitution (stdin остаётся свободным для интерактивных вопросов):
 
 ```bash
-sudo -i
+apt-get update && apt-get install -y curl; \
 bash <(curl -fsSL https://raw.githubusercontent.com/1atex/node-balancer/main/remnanode-setup.sh)
 ```
 
