@@ -48,13 +48,13 @@
 
 ```bash
 apt-get update && apt-get install -y curl; \
-bash <(curl -fsSL https://raw.githubusercontent.com/1atex/node-balancer/main/remnanode-setup.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/1atex/multi-protocol/main/remnanode-setup.sh)
 ```
 
 Либо скачать, просмотреть и запустить:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/1atex/node-balancer/main/remnanode-setup.sh -o remnanode-setup.sh
+curl -fsSL https://raw.githubusercontent.com/1atex/multi-protocol/main/remnanode-setup.sh -o remnanode-setup.sh
 less remnanode-setup.sh          # инспекция перед запуском
 bash remnanode-setup.sh
 ```
