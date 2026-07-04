@@ -1,0 +1,5 @@
+*.log
+*.env
+remnanode.env
+*.backup-*
+build-caddy-l4/
