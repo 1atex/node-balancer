@@ -84,7 +84,7 @@ XHTTP_PATH=/api/v3/sync/r1 \
 PANEL_IP=203.0.113.10 \
 NODE_API_PORT=2222 \
 SECRET_KEY='eyJ...' \
-bash <(curl -fsSL https://raw.githubusercontent.com/1atex/node-balancer/main/remnanode-setup.sh) \
+bash <(curl -fsSL https://raw.githubusercontent.com/1atex/multi-protocol/main/remnanode-setup.sh) \
   --non-interactive --yes
 ```
 
