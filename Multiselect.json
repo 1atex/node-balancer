@@ -1,0 +1,201 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "dns": {
+    "servers": [
+      "1.1.1.1",
+      "8.8.8.8"
+    ],
+    "queryStrategy": "UseIPv4"
+  },
+  "inbounds": [
+    {
+      "tag": "REALITY_VISION",
+      "port": 10443,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "network": "raw",
+        "security": "reality",
+        "rawSettings": {
+          "acceptProxyProtocol": false
+        },
+        "realitySettings": {
+          "show": false,
+          "xver": 0,
+          "target": "www.google.com:443",
+          "shortIds": [
+            ""
+          ],
+          "privateKey": "",
+          "serverNames": [
+            "www.google.com"
+          ]
+        }
+      }
+    },
+    {
+      "tag": "REALITY_XHTTP",
+      "port": 10444,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "mode": "auto",
+          "path": "/api/v3/sync/r1"
+        },
+        "realitySettings": {
+          "show": false,
+          "xver": 0,
+          "target": "www.gstatic.com:443",
+          "shortIds": [
+            ""
+          ],
+          "privateKey": "",
+          "serverNames": [
+            "www.gstatic.com"
+          ]
+        }
+      }
+    },
+    {
+      "tag": "TROJAN",
+      "port": 10445,
+      "listen": "127.0.0.1",
+      "protocol": "trojan",
+      "settings": {
+        "clients": [],
+        "fallbacks": []
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "network": "raw",
+        "security": "tls",
+        "rawSettings": {
+          "acceptProxyProtocol": false
+        },
+        "tlsSettings": {
+          "alpn": [
+            "h2",
+            "http/1.1"
+          ],
+          "serverName": "2<domain>",
+          "certificates": [
+            {
+              "keyFile": "/etc/remna-certs/<2domain>/key.pem",
+              "certificateFile": "/etc/remna-certs/<2domain>/fullchain.pem"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "tag": "HYSTERIA2",
+      "port": 443,
+      "listen": "0.0.0.0",
+      "protocol": "hysteria",
+      "settings": {
+        "clients": [],
+        "version": 2
+      },
+      "streamSettings": {
+        "network": "hysteria",
+        "security": "tls",
+        "finalmask": {
+          "quicParams": {
+            "debug": false,
+            "congestion": "bbr"
+          }
+        },
+        "tlsSettings": {
+          "alpn": [
+            "h3"
+          ],
+          "serverName": "3<domain>",
+          "certificates": [
+            {
+              "keyFile": "/etc/remna-certs/3<domain>/key.pem",
+              "certificateFile": "/etc/remna-certs/3<domain>/fullchain.pem"
+            }
+          ]
+        },
+        "hysteriaSettings": {
+          "version": 2
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "DIRECT",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      }
+    },
+    {
+      "tag": "BLOCK",
+      "protocol": "blackhole"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "BLOCK"
+      },
+      {
+        "ip": [
+          "geoip:private"
+        ],
+        "outboundTag": "BLOCK"
+      },
+      {
+        "domain": [
+          "geosite:private"
+        ],
+        "outboundTag": "BLOCK"
+      }
+    ],
+    "domainStrategy": "IPIfNonMatch"
+  }
+}
