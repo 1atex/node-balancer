@@ -32,10 +32,10 @@
         "strategy": {
           "type": "leastLoad",
           "settings": {
-            "maxRTT": "8s",
+            "maxRTT": "4s",
             "expected": 1,
             "baselines": [
-              "2s"
+              "500ms"
             ]
           }
         },
