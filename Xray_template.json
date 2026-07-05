@@ -1,0 +1,116 @@
+# Шаблон Xray, опять же минимально бомжатский, чтобы все работало. Очень советую разобраться с тегированием и сделать конфиг под себя. 
+{
+  "dns": {
+    "servers": [
+      "1.1.1.1", // Дефолтные DNS сервера, можете поменять на свои
+      "8.8.8.8"
+    ],
+    "queryStrategy": "UseIPv4"
+  },
+  "log": {
+    "loglevel": "warning" // Советую оставить warning на валидации. По начала юзайте debug. 
+  },
+  "routing": {
+    "rules": [
+      {
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "network": "tcp,udp",
+        "balancerTag": "USA" // Тег балансера, который будет использоваться для всех исходящих соединений, которые не соответствуют другим правилам
+      }
+    ],
+    "balancers": [
+      {
+        "tag": "USA", // Везде один тег
+        "selector": [
+          "proxy"
+        ],
+        "strategy": {
+          "type": "leastLoad",
+          "settings": {
+            "maxRTT": "8s",
+            "expected": 1,
+            "baselines": [
+              "2s"
+            ]
+          }
+        },
+        "fallbackTag": "block"
+      }
+    ],
+    "domainStrategy": "IPIfNonMatch"
+  },
+  "inbounds": [
+    {
+      "tag": "socks",
+      "port": 10808,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": true,
+        "auth": "noauth"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      }
+    },
+    {
+      "tag": "http",
+      "port": 10809,
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "settings": {},
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole"
+    }
+  ],
+  "remnawave": {
+    "injectHosts": [
+      {
+        "selector": {
+          "type": "tagRegex",
+          "pattern": "^USA$" //Не забудьте и тут поменять тег балансера на свой, если вы его меняли
+        },
+        "tagPrefix": "proxy",
+        "selectFrom": "HIDDEN"
+      }
+    ]
+  },
+  "burstObservatory": {
+    "pingConfig": {
+      "timeout": "8s",
+      "interval": "30s",
+      "sampling": 2,
+      "destination": "https://www.gstatic.com/generate_204",
+      "connectivity": ""
+    },
+    "subjectSelector": [
+      "proxy"
+    ]
+  }
+}
